@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GeoQuiz</string>
+    <string name="question_text">Constantinople is the largest city in Turkey.</string>
+    <string name="question2_text">What is the capital of Germany?</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="choicea_button">Berlin</string>
+    <string name="choiceb_button">Paris</string>
+    <string name="choicec_button">Portugal</string>
+    <string name="choiced_button">Nuremburg</string>
+    <string name="action_settings">Settings</string>
+    <string name="incorrect_toast">Incorrect</string>
+    <string name="correct_toast">Correct</string>
+</resources>
