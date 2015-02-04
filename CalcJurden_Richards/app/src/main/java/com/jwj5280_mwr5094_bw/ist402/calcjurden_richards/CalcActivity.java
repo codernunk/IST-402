@@ -1,3 +1,10 @@
+/**
+ * CalcActivity.java
+ * Jesse Jurden, Mike Richards
+ * February 9, 2015
+ *
+ * This handles the main activity and logic for the calculator app.
+ */
 package com.jwj5280_mwr5094_bw.ist402.calcjurden_richards;
 
 import android.support.v7.app.ActionBarActivity;
@@ -6,28 +13,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class CalcActivity extends ActionBarActivity {
 
-    TextView txtResult;
-    String result;
-    char operation;
+    private TextView txtResult; // Keeps a reference to the TextView element that will display the result.
+    private String inStr = "0"; // Saves the previous value of what the user has put in
+    private char lastOperator = ' '; // Keeps track of what operation the user wants to perform
+    private float result = 0; // The float result for calculation
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calc);
 
-        result = "0";
-
+        // Initialize the TextView
         txtResult = (TextView) findViewById(R.id.txtResult);
+        txtResult.setText("0");
 
+        // Create our button listener in order to apply it to the buttons
         BtnListener listener = new BtnListener();
 
+        // Set the button listener to all our buttons.
         findViewById(R.id.btn0).setOnClickListener(listener);
         findViewById(R.id.btn1).setOnClickListener(listener);
         findViewById(R.id.btn2).setOnClickListener(listener);
@@ -44,6 +53,7 @@ public class CalcActivity extends ActionBarActivity {
         findViewById(R.id.btnDivide).setOnClickListener(listener);
         findViewById(R.id.btnDot).setOnClickListener(listener);
         findViewById(R.id.btnEquals).setOnClickListener(listener);
+        findViewById(R.id.btnClear).setOnClickListener(listener);
     }
 
 
@@ -69,13 +79,45 @@ public class CalcActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void compute() {
+        // convert inStr to float value
+        float inNum = Float.parseFloat(inStr);
+        inStr = "0";
 
+        if (lastOperator == ' ') {
+            result = inNum;
+        } else if (lastOperator == '+') {
+            result += inNum;
+        } else if (lastOperator == '-') {
+            result -= inNum;
+        } else if (lastOperator == '*') {
+            result *= inNum;
+        } else if (lastOperator == '/') {
+            if (inNum == 0) {
+                // Handle the divided by zero exception
+                Toast.makeText(this, "Silly goose! You cannot divide by zero!", Toast.LENGTH_SHORT).show();
+                result = 0;
+                txtResult.setText(String.valueOf(result));
+            } else {
+                result /= inNum;
+            }
+
+        } else if (lastOperator == '=') {
+            // Keep the result for the next operation
+            result = inNum;
+        }
+        // Convert numeric result to String and then display
+        txtResult.setText(String.valueOf(result));
+    }
+
+    /**
+     * Inner class used as an OnClickListener for all the buttons
+     */
     private class BtnListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Button thisButton = (Button) findViewById(view.getId());
-
             switch (view.getId()) {
+                // Numeric buttons, including decimal
                 case R.id.btn0:
                 case R.id.btn1:
                 case R.id.btn2:
@@ -87,53 +129,50 @@ public class CalcActivity extends ActionBarActivity {
                 case R.id.btn8:
                 case R.id.btn9:
                 case R.id.btnDot:
+                    // Assigns or appends the digit to the display
+                    String inDigit = ((Button) view).getText().toString();
 
-                    String currentText = txtResult.getText().toString();
-
-                    if (currentText.equals("0")) {
-                        currentText = thisButton.getText().toString();
+                    if (inStr.equals("0")) {
+                        // If the user enters a dot first, then it should say 0.
+                        // It could cause an error otherwise.
+                        if (inDigit.equals(".")) {
+                            inStr = "0" + inDigit;
+                        } else {
+                            inStr = inDigit;
+                        }
                     } else {
-                        currentText += thisButton.getText();
+                        // DON'T add any more decimals if one already exists
+                        if (inDigit.equals(".") && inStr.contains(".")) {
+                            // Do nothing
+                        } else {
+                            inStr += inDigit;
+                        }
                     }
-
-                    txtResult.setText(currentText);
-
+                    // Display the new text
+                    txtResult.setText(inStr);
+                    // Clear buffer if last operator is '='
+                    if (lastOperator == '='){
+                        // Result
+                        result = 0;
+                        lastOperator = ' ';
+                    }
                     break;
+                // Operator buttons
                 case R.id.btnPlus:
                 case R.id.btnMinus:
                 case R.id.btnTimes:
                 case R.id.btnDivide:
-
-                    operation = thisButton.getText().charAt(0);
-                    result = txtResult.getText().toString();
-
-                    break;
                 case R.id.btnEquals:
-
-                    switch (operation){
-                        case '+':
-                            float val1 = Float.parseFloat(result);
-                            float val2 = Float.parseFloat(txtResult.getText().toString());
-
-                            float answer = val1+val2;
-
-                            result = String.valueOf(answer);
-
-                            txtResult.setText(result);
-
-                            break;
-                        case '-':
-                            break;
-                        case '*':
-                            break;
-                        case '/':
-                            break;
-                        default:
-                    }
+                    compute();
+                    lastOperator = ((Button) view).getText().charAt(0);
 
                     break;
+                // Clear button
                 case R.id.btnClear:
-                    txtResult.setText("0");
+                    inStr = "0";
+                    txtResult.setText(inStr);
+                    result = 0;
+                    lastOperator = ' ';
                     break;
             }
         }
