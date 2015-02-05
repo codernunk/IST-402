@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,7 +96,13 @@ public class CalcActivity extends ActionBarActivity {
         } else if (lastOperator == '/') {
             if (inNum == 0) {
                 // Handle the divided by zero exception
-                Toast.makeText(this, "Silly goose! You cannot divide by zero!", Toast.LENGTH_SHORT).show();
+                Toast toast = new Toast(this);
+                ImageView view = new ImageView(this);
+                view.setImageResource(R.drawable.goose);
+                toast.setView(view);
+                toast.setText("Silly goose! You cannot divide by zero!");
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.show();
                 result = 0;
                 txtResult.setText(String.valueOf(result));
             } else {
@@ -104,7 +111,9 @@ public class CalcActivity extends ActionBarActivity {
 
         } else if (lastOperator == '=') {
             // Keep the result for the next operation
+            /// TODO: fix the issue here to make sure hitting an operator after an equals will preserve the result
             result = inNum;
+            inStr = String.valueOf(inNum);
         }
         // Convert numeric result to String and then display
         txtResult.setText(String.valueOf(result));
