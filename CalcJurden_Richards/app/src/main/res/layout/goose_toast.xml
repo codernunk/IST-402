@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+goose_toast.xml
+Jesse Jurden, Mike Richards
+February 9, 2015
+
+This is an additional custom goose toast layout just for fun.
+-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rlGooseToastMain">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp">
+
+        <TableRow android:background="@android:drawable/toast_frame">
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/goose"
+                android:layout_margin="5dip"
+                android:id="@+id/ivGooseToast"
+                android:cropToPadding="false">
+            </ImageView>
+
+            <TextView
+                android:id="@+id/tvGooseToastText"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:text=""
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_toRightOf="@+id/ivGooseToast"
+                android:textColor="#FFF">
+            </TextView>
+
+        </TableRow>
+
+        </TableLayout>
+
+
+</RelativeLayout>

@@ -9,11 +9,12 @@ package com.jwj5280_mwr5094_bw.ist402.calcjurden_richards;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -96,13 +97,7 @@ public class CalcActivity extends ActionBarActivity {
         } else if (lastOperator == '/') {
             if (inNum == 0) {
                 // Handle the divided by zero exception
-                Toast toast = new Toast(this);
-                ImageView view = new ImageView(this);
-                view.setImageResource(R.drawable.goose);
-                toast.setView(view);
-                toast.setText("Silly goose! You cannot divide by zero!");
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.show();
+                makeGooseToast(getString(R.string.goose_toast_divide_by_zero));
                 result = 0;
                 txtResult.setText(String.valueOf(result));
             } else {
@@ -111,12 +106,29 @@ public class CalcActivity extends ActionBarActivity {
 
         } else if (lastOperator == '=') {
             // Keep the result for the next operation
-            /// TODO: fix the issue here to make sure hitting an operator after an equals will preserve the result
-            result = inNum;
-            inStr = String.valueOf(inNum);
+            // Therefore, do nothing.
         }
+
         // Convert numeric result to String and then display
         txtResult.setText(String.valueOf(result));
+    }
+
+    // Custom method in order to display our custom toast.
+    private void makeGooseToast(String message){
+        // We want to inflate our additional layout for the custom goose toast.
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.goose_toast,
+                (ViewGroup) findViewById(R.id.rlGooseToastMain));
+
+        // Make a new toast in this context
+        Toast toast = new Toast(this);
+        toast.setView(view);
+
+        // Also, we want to assign a new text value to it.
+        TextView tvText = (TextView) toast.getView().findViewById(R.id.tvGooseToastText);
+        tvText.setText(message);
+
+        toast.show();
     }
 
     /**
@@ -153,6 +165,7 @@ public class CalcActivity extends ActionBarActivity {
                         // DON'T add any more decimals if one already exists
                         if (inDigit.equals(".") && inStr.contains(".")) {
                             // Do nothing
+                            makeGooseToast(getString(R.string.goose_toast_multiple_dots));
                         } else {
                             inStr += inDigit;
                         }

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+strings.xml
+Jesse Jurden, Mike Richards
+February 9, 2015
+
+Contains all the string constants used in the app.
+-->
 <resources>
 
     <string name="app_name">CalcJurden_Richards</string>
@@ -21,5 +28,7 @@
     <string name="btn_minus">-</string>
     <string name="btn_times">*</string>
     <string name="btn_divide">/</string>
+    <string name="goose_toast_multiple_dots">Silly goose! You cannot type two or more dots!</string>
+    <string name="goose_toast_divide_by_zero">Silly goose!  You cannot divide by zero!</string>
 
 </resources>

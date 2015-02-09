@@ -1,3 +1,10 @@
+<!--
+ activity_calc.xml
+ Jesse Jurden, Mike Richards
+ February 9, 2015
+
+ This is the main layout of the calculator app.
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
