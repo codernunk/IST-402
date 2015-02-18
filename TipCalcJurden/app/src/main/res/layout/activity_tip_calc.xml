@@ -1,3 +1,10 @@
+<!--
+    Programmer name: Jesse Jurden
+    Date: February 18, 2015
+
+    activity_tip_calc.xml - Week 5 Assignment
+    Represents the primary view of the TipCalc application
+-->
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tableLayout"
     android:layout_width="match_parent"
@@ -181,13 +188,15 @@
             android:textColor="#000" />
 
         <SeekBar
-            android:id="@+id/customSeekBar"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:indeterminate="false"
-            android:max="100"
-            android:progress="10" />
+            android:layout_width="match_parent"
+            android:id="@+id/customSeekBar"
+            android:layout_span="2"
+            android:progress="18"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="5dp"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/customTipTextView"
@@ -195,7 +204,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingRight="5dp"
-            android:text="10%"
+            android:text="18%"
             android:textColor="#000" />
     </TableRow>
 
