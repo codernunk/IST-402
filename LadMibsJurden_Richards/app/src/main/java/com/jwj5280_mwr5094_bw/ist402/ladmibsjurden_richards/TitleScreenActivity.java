@@ -1,9 +1,20 @@
 package com.jwj5280_mwr5094_bw.ist402.ladmibsjurden_richards;
 
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import java.io.File;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 
 public class TitleScreenActivity extends ActionBarActivity {
@@ -12,6 +23,8 @@ public class TitleScreenActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_title_screen);
+
+        readStoryFile();
     }
 
 
@@ -35,5 +48,25 @@ public class TitleScreenActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void readStoryFile(){
+        try{
+            Resources res = getResources();
+            XmlResourceParser xrp = res.getXml(R.xml.stories);
+
+            while (xrp.next() == XmlResourceParser.START_TAG) {
+                if (xrp.getName().equals("title")) {
+                    String title = xrp.nextText();
+                    Log.d("XML stuff", title);
+                }
+                if (xrp.getName().equals("text")) {
+                    String text = xrp.nextText();
+                    Log.d("XML stuff", text);
+                }
+            }
+        }catch (Exception e){
+            Log.e("test",e.toString());
+        }
     }
 }
