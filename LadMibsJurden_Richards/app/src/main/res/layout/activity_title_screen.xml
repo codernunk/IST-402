@@ -21,13 +21,28 @@ android:background="#8f8fa4"
         android:src="@drawable/lad_mib_logo"/>
 
 </TableRow>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="40dp"
+        android:gravity="center"
+        android:text="Developed By: Jesse Jurden & Mike Richards"
+        android:textSize="10dp"
+        android:textColor="#000000"
+        />
+
 
 <TableRow
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
     <Button
-        android:text="@string/start_button"/>
+        android:text="@string/start_button"
+        android:background="#000"
+        android:textColor="#ffbf86"
+        android:textSize="20dp"
+        />
+
 </TableRow>
 
 
