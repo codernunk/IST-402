@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,14 +22,25 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 public class TitleScreenActivity extends ActionBarActivity {
 
+    private Button btnStart;
+
+    private Story chosenStory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_title_screen);
 
         readStoryFile();
-    }
 
+        btnStart = (Button)findViewById(R.id.btnStart);
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // go to the next activity
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,23 +64,39 @@ public class TitleScreenActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void readStoryFile(){
+    private ArrayList<Story> readStoryFile(){
         try{
             Resources res = getResources();
             XmlResourceParser xrp = res.getXml(R.xml.stories);
 
-            while (xrp.next() == XmlResourceParser.START_TAG) {
-                if (xrp.getName().equals("title")) {
-                    String title = xrp.nextText();
-                    Log.d("XML stuff", title);
+            ArrayList<Story> allStories = new ArrayList<Story>();
+            Story story = null;
+
+            while(xrp.next() != XmlResourceParser.END_DOCUMENT){
+                if(xrp.getEventType() != XmlResourceParser.START_TAG)
+                    continue;
+
+                String elementName = xrp.getName();
+
+                if (elementName.equals("story")){
+                    if (story != null)
+                        allStories.add(story);
+                    story = new Story();
                 }
-                if (xrp.getName().equals("text")) {
+                if (elementName.equals("title")) {
+                    String title = xrp.nextText();
+                    story.setTitle(title);
+                }
+                if (elementName.equals("text")) {
                     String text = xrp.nextText();
-                    Log.d("XML stuff", text);
+                    story.setText(text);
                 }
             }
+
+            return allStories;
         }catch (Exception e){
             Log.e("test",e.toString());
         }
+        return null;
     }
 }

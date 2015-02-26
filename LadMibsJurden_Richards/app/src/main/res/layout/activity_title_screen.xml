@@ -27,6 +27,7 @@ android:background="#8f8fa4"
     android:layout_height="match_parent"
     android:gravity="center">
     <Button
+        android:id="@+id/btnStart"
         android:text="@string/start_button"/>
 </TableRow>
 
