@@ -2,7 +2,6 @@
         Jesse Jurden
         January 21, 2015
 */
-
 package com.jwj5280_bw.ist402.geoquiz;
 
 import android.support.v7.app.ActionBarActivity;

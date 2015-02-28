@@ -1,23 +1,17 @@
 package com.jwj5280_mwr5094_bw.ist402.ladmibsjurden_richards;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import java.io.File;
 import java.util.ArrayList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 
 public class TitleScreenActivity extends ActionBarActivity {
@@ -37,7 +31,8 @@ public class TitleScreenActivity extends ActionBarActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // go to the next activity
+                Intent i = new Intent(TitleScreenActivity.this,InputActivity.class);
+                startActivity(i);
             }
         });
     }
