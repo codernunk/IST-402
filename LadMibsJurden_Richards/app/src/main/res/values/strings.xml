@@ -9,5 +9,6 @@
     <string name="next_button">NEXT!</string>
     <string name="title_activity_story">StoryActivity</string>
     <string name="done_button">DONE</string>
+    <string name="next_button_finish">Finish</string>
 
 </resources>

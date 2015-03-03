@@ -14,6 +14,7 @@
         android:gravity="center"
         android:src="@drawable/lad_mib_logo"/>
     <TextView
+        android:id="@+id/txtCommand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="24dp"
@@ -23,7 +24,7 @@
         android:textColor="#000000"
         />
     <EditText
-        android:id="@+id/inputText"
+        android:id="@+id/txtWordInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="30dp"
@@ -34,6 +35,7 @@
         android:layout_height="match_parent"
         android:gravity="center">
         <Button
+            android:id="@+id/btnNext"
             android:background="#000"
             android:textColor="#ffbf86"
             android:text="@string/next_button"

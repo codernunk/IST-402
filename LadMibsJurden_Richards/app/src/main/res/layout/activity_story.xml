@@ -7,11 +7,18 @@
              android:background="#8f8fa4">
 
     <TableRow
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:gravity="top|center">
         <TextView
+            android:id="@+id/txtStoryTitle"
             android:text="Story Title"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:ellipsize="none"
+            android:maxLines="100"
+            android:scrollHorizontally="false"
             android:textSize="32sp"
             android:textStyle="bold"/>
     </TableRow>
@@ -23,20 +30,25 @@
         android:padding="8dp"
         android:gravity="top|left">
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/txtStoryText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Finished story goes here..."
-            android:textSize="10dp"
-            android:textColor="#000000"
-            />
+            android:gravity="top|center"
+            android:text="test test test test test test test test test"
+            android:layout_weight="1"
+            android:ellipsize="none"
+            android:maxLines="100"
+            android:scrollHorizontally="false"
+            android:textSize="20sp"
+            android:textColor="#000000"/>
+
     </TableRow>
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center">
         <Button
-            android:id="@+id/btnStart"
+            android:id="@+id/btnDone"
             android:text="@string/done_button"
             android:background="#000"
             android:textColor="#ffbf86"
