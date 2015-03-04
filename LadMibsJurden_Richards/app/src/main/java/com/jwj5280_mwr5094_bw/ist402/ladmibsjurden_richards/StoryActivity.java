@@ -8,8 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-
+/**
+ * StoryActivity.java
+ * Jesse Jurden, Mike Richards
+ *
+ * March 6, 2015
+ *
+ * This is the final activity that will display the finished story.
+ */
 public class StoryActivity extends ActionBarActivity {
 
     private Story currentStory;

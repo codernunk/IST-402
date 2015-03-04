@@ -4,15 +4,13 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="28dp"
-    android:background="#8f8fa4"
-
-    >
-    <ImageView
+    android:background="#8f8fa4">
+<!--    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:src="@drawable/lad_mib_logo"/>
+        android:layout_weight="1"
+        android:gravity="top"
+        android:src="@drawable/lad_mib_logo"/>-->
     <TextView
         android:id="@+id/txtCommand"
         android:layout_width="wrap_content"
@@ -35,6 +33,13 @@
         android:layout_height="match_parent"
         android:gravity="center">
         <Button
+            android:id="@+id/btnPrevious"
+            android:background="#000"
+            android:textColor="#ffbf86"
+            android:text="@string/previous_button"
+            android:textSize="16dp"
+            />
+        <Button
             android:id="@+id/btnNext"
             android:background="#000"
             android:textColor="#ffbf86"
@@ -43,6 +48,4 @@
             />
 
     </TableRow>
-
-
-    </TableLayout>
+</TableLayout>
