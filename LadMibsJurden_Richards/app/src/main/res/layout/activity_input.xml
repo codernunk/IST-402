@@ -26,26 +26,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="30dp"
-        android:inputType="text">
+        android:inputType="text"
+        >
         </EditText>
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_marginTop="60dp" >
         <Button
             android:id="@+id/btnPrevious"
             android:background="#000"
             android:textColor="#ffbf86"
             android:text="@string/previous_button"
-            android:textSize="16dp"
-            />
+            android:textSize="16dp" />
+
         <Button
             android:id="@+id/btnNext"
             android:background="#000"
             android:textColor="#ffbf86"
             android:text="@string/next_button"
-            android:textSize="20dp"
-            />
+            android:textSize="20dp"/>
 
     </TableRow>
 </TableLayout>
