@@ -59,14 +59,15 @@ public class Story implements Serializable {
      * Returns the version of the story with the completed values.
      */
     public String getCompletedStory(){
+        // Store the Story into a temporary string value
         StringBuilder tempStory = new StringBuilder(text);
         for (int i = 0; i < words.size(); i++){
+            // Get the words in order, remove the [] in the story, and replace them with the user's input
             StoryWord sw = words.get(i);
-
             int firstIndex = tempStory.indexOf("[");
             int lastIndex = tempStory.indexOf("]")+1;
-            String current = tempStory.toString();
-            tempStory.replace(firstIndex,lastIndex,sw.getValue());
+            // I use <b> tags to bold the user's selected word
+            tempStory.replace(firstIndex,lastIndex,"<b>"+sw.getValue()+"</b>");
         }
 
         return tempStory.toString();

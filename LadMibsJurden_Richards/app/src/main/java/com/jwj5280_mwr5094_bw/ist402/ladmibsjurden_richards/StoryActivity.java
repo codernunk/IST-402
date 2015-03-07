@@ -3,6 +3,7 @@ package com.jwj5280_mwr5094_bw.ist402.ladmibsjurden_richards;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -73,8 +74,9 @@ public class StoryActivity extends ActionBarActivity {
      * Updates the UI to reflect the story.
      */
     private void updateUI(){
+        // Set the title of the story
         txtStoryTitle.setText(currentStory.getTitle());
-        String completedStory = currentStory.getCompletedStory();
-        txtStoryText.setText(completedStory);
+        // Set the text of the story (use HTML formatting to display bold text)
+        txtStoryText.setText(Html.fromHtml(currentStory.getCompletedStory()));
     }
 }

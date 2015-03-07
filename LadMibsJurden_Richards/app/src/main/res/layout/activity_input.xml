@@ -1,3 +1,9 @@
+<!--
+activity_input.xml
+Jesse Jurden, Mike Richards
+March 6, 2015
+This is the View for the InputActivity.
+-->
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

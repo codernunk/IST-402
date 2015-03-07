@@ -157,6 +157,8 @@ public class InputActivity extends ActionBarActivity {
         // If we are on the last word, make sure to show "Finish" on the button
         if (currentWordIndex+1 == currentStory.getStoryWords().size()){
             btnNext.setText(getString(R.string.next_button_finish));
+        }else{
+            btnNext.setText(R.string.next_button);
         }
 
         // Get the current word we are trying to get input for
