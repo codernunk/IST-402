@@ -44,6 +44,7 @@ This is the View for the InputActivity.
             android:id="@+id/btnPrevious"
             android:background="#000"
             android:textColor="#ffbf86"
+
             android:text="@string/previous_button"
             android:textSize="16dp" />
 
