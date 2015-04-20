@@ -1,7 +1,9 @@
 package com.teamf_bw.ist402.tiltnroll;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Represents the player in the game.
@@ -16,8 +18,22 @@ public class Player extends GameObject {
         super(image,x,y,0);
     }
 
-    public void update(){
+    public void update(ArrayList<GameObject> objectsInScene){
         x += xVel;
-        y += yVel;
+        y -= yVel;
+
+        for (GameObject go : objectsInScene){
+            if (go instanceof Wall && collision(go,false)){
+                if (go.getY() > y){
+                    y = go.getY()-getImage().getHeight();
+                    yVel *= -1;
+                }else{
+                    y = go.getY()+go.getImage().getHeight();
+                    yVel *= -1;
+                }
+
+                Log.d(GameController.TAG_GAME,"Collision with Wall "+getId().toString());
+            }
+        }
     }
 }

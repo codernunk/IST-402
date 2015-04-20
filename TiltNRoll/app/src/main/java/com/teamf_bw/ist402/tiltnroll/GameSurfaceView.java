@@ -7,9 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +26,8 @@ public class GameSurfaceView extends SurfaceView {
     private Bitmap goalImage;
     private Bitmap wallImage;
 
+    private Paint paint;
+
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
     private ArrayList<GameObject> gameObjects;
@@ -32,6 +36,7 @@ public class GameSurfaceView extends SurfaceView {
 
     public GameSurfaceView(Context context) {
         super(context);
+        paint = new Paint();
         gameLoopThread = new GameLoopThread(this);
         gameObjects = new ArrayList<GameObject>();
         holder = getHolder();
@@ -69,12 +74,25 @@ public class GameSurfaceView extends SurfaceView {
         wallImage = BitmapFactory.decodeResource(getResources(), R.drawable.wall);
 
         // Create a player
-        player = new Player(ballImage, 0, 0);
+        player = new Player(ballImage, 160, 160);
         gameObjects.add(player);
 
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+
         // Create a wall
-        Wall w = new Wall(wallImage, 80, 80);
-        gameObjects.add(w);
+        for (int i = 0; i < 15; i++){
+            Wall w = new Wall(wallImage, 0, i*wallImage.getHeight());
+            gameObjects.add(w);
+            Wall w2 = new Wall(wallImage, display.getWidth()-80, i*wallImage.getHeight());
+            gameObjects.add(w2);
+        }
+        for (int i = 0; i < 24; i++){
+            Wall w = new Wall(wallImage, i * wallImage.getWidth(), 0);
+            gameObjects.add(w);
+            Wall w2 = new Wall(wallImage, i * wallImage.getWidth(), display.getHeight()-80);
+            gameObjects.add(w2);
+        }
     }
 
     @Override
@@ -85,12 +103,18 @@ public class GameSurfaceView extends SurfaceView {
         // Draw the base color
         canvas.drawColor(Color.CYAN);
 
+        // Sort the game objects by depth and draw them in that order.
         Collections.sort(gameObjects);
         // Draw all the game objects
         for (GameObject g: gameObjects){
             canvas.drawBitmap(g.getImage(), g.getX(), g.getY(), null);
+            paint.setTextSize(48);
+            paint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText("Score: 0", 10, 40, paint);
+            canvas.drawText("Level 1", 10, canvas.getHeight()-10, paint);
+            paint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText("Time: 60", canvas.getWidth()/2, 40, paint);
         }
-
     }
 
     /**
@@ -98,7 +122,7 @@ public class GameSurfaceView extends SurfaceView {
      */
     protected void update(){
         for (GameObject g: gameObjects){
-            g.update();
+            g.update(gameObjects);
         }
     }
 }

@@ -2,6 +2,8 @@ package com.teamf_bw.ist402.tiltnroll;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+
 /**
  * Represents a wall in which the player can collide.
  * Created by Jesse on 4/15/2015.
@@ -12,6 +14,6 @@ public class Wall extends GameObject {
         super(image,x,y,100);
     }
 
-    public void update(){
+    public void update(ArrayList<GameObject> objectsInScene){
     }
 }
