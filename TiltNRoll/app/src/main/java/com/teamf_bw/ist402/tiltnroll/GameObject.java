@@ -1,6 +1,7 @@
 package com.teamf_bw.ist402.tiltnroll;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.UUID;
  * Created by Jesse on 4/15/2015.
  */
 public abstract class GameObject implements Comparable<GameObject> {
+
     private UUID id;
     private int depth = 0;
     private Bitmap image;
@@ -63,29 +65,55 @@ public abstract class GameObject implements Comparable<GameObject> {
         return this.depth - other.getDepth();
     }
 
-    public boolean collision(GameObject other, boolean isPrecise){
+    public boolean collision(GameObject other, boolean isPrecise, int xOffset, int yOffset){
+
+        // Get the rectangle and bounds of the source object (the caller)
+        int sourceTop = (int)getY()+xOffset;
+        int sourceLeft = (int)getX()+yOffset;
+        int sourceRight = sourceLeft + (int)getImage().getWidth()+xOffset;
+        int sourceBottom = sourceTop + (int)getImage().getHeight()+yOffset;
+
+        Rect sourceBounds = new Rect(sourceLeft,sourceTop,sourceRight,sourceBottom);
+
+        // Get the rectangle and bounds of the target object
+        int targetTop = (int)other.getY();
+        int targetLeft = (int)other.getX();
+        int targetRight = targetLeft + (int)other.getImage().getWidth();
+        int targetBottom = targetTop + (int)other.getImage().getHeight();
+
+        Rect targetBounds = new Rect(targetLeft,targetTop,targetRight,targetBottom);
 
         if (isPrecise){
 
+            if (sourceBounds.intersect(targetBounds)){
+                Rect collisionBounds = getCollisionBounds(sourceBounds, targetBounds);
+                for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
+                    for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
+                        int bitmap1Pixel = getImage().getPixel(i, j);
+                        int bitmap2Pixel = other.getImage().getPixel(i, j);
+                        if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }else{
-            int sourceTop = (int)getY();
-            int sourceLeft = (int)getX();
-            int sourceRight = sourceLeft + (int)getImage().getWidth();
-            int sourceBottom = sourceTop + (int)getImage().getHeight();
-
-            Rect sourceBounds = new Rect(sourceLeft,sourceTop,sourceRight,sourceBottom);
-
-            int targetTop = (int)other.getY();
-            int targetLeft = (int)other.getX();
-            int targetRight = targetLeft + (int)other.getImage().getWidth();
-            int targetBottom = targetTop + (int)other.getImage().getHeight();
-
-            Rect targetBounds = new Rect(targetLeft,targetTop,targetRight,targetBottom);
-
             return sourceBounds.intersect(targetBounds);
         }
 
         return false;
+    }
+
+    private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
+        int left = (int) Math.max(rect1.left, rect2.left);
+        int top = (int) Math.max(rect1.top, rect2.top);
+        int right = (int) Math.min(rect1.right, rect2.right);
+        int bottom = (int) Math.min(rect1.bottom, rect2.bottom);
+        return new Rect(left, top, right, bottom);
+    }
+
+    private static boolean isFilled(int pixel) {
+        return pixel != Color.TRANSPARENT;
     }
 
     public abstract void update(ArrayList<GameObject> objectsInScene);

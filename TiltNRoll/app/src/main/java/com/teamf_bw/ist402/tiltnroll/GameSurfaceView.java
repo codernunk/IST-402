@@ -11,6 +11,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
@@ -21,24 +22,25 @@ import java.util.Collections;
  * Created by Jesse on 4/15/2015.
  */
 public class GameSurfaceView extends SurfaceView {
-    private Bitmap ballImage;
-    private Bitmap deathImage;
-    private Bitmap goalImage;
-    private Bitmap wallImage;
-
     private Paint paint;
-
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
     private ArrayList<GameObject> gameObjects;
 
-    private Player player;
-
     public GameSurfaceView(Context context) {
         super(context);
+
         paint = new Paint();
+        this.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
         gameLoopThread = new GameLoopThread(this);
-        gameObjects = new ArrayList<GameObject>();
+        gameObjects = LevelManager.loadLevel(context,0);//new ArrayList<GameObject>();
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
 
@@ -67,32 +69,11 @@ public class GameSurfaceView extends SurfaceView {
             }
         });
 
-        // Load all the bitmaps
-        ballImage = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
-        deathImage = BitmapFactory.decodeResource(getResources(), R.drawable.death);
-        goalImage = BitmapFactory.decodeResource(getResources(), R.drawable.goal);
-        wallImage = BitmapFactory.decodeResource(getResources(), R.drawable.wall);
+        //newLevel(0);
+    }
 
-        // Create a player
-        player = new Player(ballImage, 160, 160);
-        gameObjects.add(player);
-
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        // Create a wall
-        for (int i = 0; i < 15; i++){
-            Wall w = new Wall(wallImage, 0, i*wallImage.getHeight());
-            gameObjects.add(w);
-            Wall w2 = new Wall(wallImage, display.getWidth()-80, i*wallImage.getHeight());
-            gameObjects.add(w2);
-        }
-        for (int i = 0; i < 24; i++){
-            Wall w = new Wall(wallImage, i * wallImage.getWidth(), 0);
-            gameObjects.add(w);
-            Wall w2 = new Wall(wallImage, i * wallImage.getWidth(), display.getHeight()-80);
-            gameObjects.add(w2);
-        }
+    protected void newLevel(int level){
+        gameObjects = LevelManager.loadLevel(getContext(),level);
     }
 
     @Override

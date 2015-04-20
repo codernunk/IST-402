@@ -23,7 +23,7 @@ public class Player extends GameObject {
         y -= yVel;
 
         for (GameObject go : objectsInScene){
-            if (go instanceof Wall && collision(go,false)){
+            if (go instanceof Wall && collision(go, false, 0, 0)){
                 if (go.getY() > y){
                     y = go.getY()-getImage().getHeight();
                     yVel *= -1;
