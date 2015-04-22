@@ -1,6 +1,7 @@
 package com.teamf_bw.ist402.tiltnroll;
 
 import android.graphics.Bitmap;
+import android.os.Debug;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -11,14 +12,22 @@ import java.util.ArrayList;
  */
 public class Player extends GameObject {
 
-    private float xVel = 1f;
-    private float yVel = 1f;
+    private float xVel = 5f;
+    private float yVel = 0.1f;
+
+    private float lastX;
+    private float lastY;
 
     public Player(Bitmap image, float x, float y){
         super(image,x,y,0);
+        lastX = x;
+        lastY = y;
     }
 
     public void update(ArrayList<GameObject> objectsInScene){
+        lastX = x;
+        lastY = y;
+
         x += xVel;
         y += yVel;
 
@@ -27,8 +36,8 @@ public class Player extends GameObject {
             if (go instanceof Wall){
 
                 // Check for collisions on the y axis
-                if (collision(go, false, 0, 0)){
-                    if (go.getY() > y){
+                if (collision(go, false, (int)xVel, (int)yVel)){
+/*                    if (go.getY() > y){
                         y = go.getY()-getImage().getHeight();
                         yVel *= -1;
                     }else{
@@ -41,11 +50,20 @@ public class Player extends GameObject {
                     }
                     if (xVel < 0 && x+getImage().getWidth() > go.getX()){
                         xVel *= -1;
-                    }
+                    }*/
+                    // Calculate collision angle
+                    double angle = -Math.atan2(yVel,xVel);
+                    float speed = (float)Math.sqrt(xVel * xVel + yVel * yVel);
+                    //Log.d(GameController.TAG_GAME,"angle: "+angle);
+                    xVel = (float)Math.cos(angle) * speed;
+                    yVel = (float)Math.sin(angle) * speed;
+                    x = lastX;
+                    y = lastY;
                 }
 
                 //Log.d(GameController.TAG_GAME,"Collision with Wall "+getId().toString());
             }
         }
     }
+
 }

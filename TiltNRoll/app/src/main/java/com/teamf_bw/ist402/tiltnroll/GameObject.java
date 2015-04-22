@@ -104,6 +104,30 @@ public abstract class GameObject implements Comparable<GameObject> {
         return false;
     }
 
+    public GameObject collisionAtPosition(ArrayList<GameObject> objectsInScene, int xOffset, int yOffset){
+        // Get the rectangle and bounds of the source object (the caller)
+        int sourceTop = (int)getY()+xOffset;
+        int sourceLeft = (int)getX()+yOffset;
+        int sourceRight = sourceLeft;
+        int sourceBottom = sourceTop;
+
+        Rect sourceBounds = new Rect(sourceLeft,sourceTop,sourceRight,sourceBottom);
+
+        for (GameObject other: objectsInScene){
+            // Get the rectangle and bounds of the target object
+            int targetTop = (int)other.getY();
+            int targetLeft = (int)other.getX();
+            int targetRight = targetLeft + (int)other.getImage().getWidth();
+            int targetBottom = targetTop + (int)other.getImage().getHeight();
+
+            Rect targetBounds = new Rect(targetLeft,targetTop,targetRight,targetBottom);
+
+            if (targetBounds.intersect(sourceBounds))
+                return other;
+        }
+        return null;
+    }
+
     private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
         int left = (int) Math.max(rect1.left, rect2.left);
         int top = (int) Math.max(rect1.top, rect2.top);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ public class LevelManager {
     // Variables for managing the levels and objects
     private int levelId;
     private ArrayList<GameObject> gameObjects;
+    private Player playerObj; // We want to keep a reference of the player object so we can reset his position
+
+    private Point playerPosition;
 
     /**
      * The constructor is protected because we want to use the
@@ -43,9 +47,11 @@ public class LevelManager {
      * @param levelId
      * @param objects
      */
-    protected LevelManager(int levelId, ArrayList<GameObject> objects){
+    protected LevelManager(int levelId, ArrayList<GameObject> objects, Player player, Point playerPos){
         this.levelId = levelId;
         gameObjects = objects;
+        playerObj = player;
+        playerPosition = playerPos;
     }
 
     /**
@@ -54,6 +60,16 @@ public class LevelManager {
      */
     public ArrayList<GameObject> getGameObjects(){
         return gameObjects;
+    }
+
+    /**
+     * Resets the player's position.
+     */
+    public void resetLevel(){
+        if (playerObj != null){
+            playerObj.setX(playerPosition.x);
+            playerObj.setY(playerPosition.y);
+        }
     }
 
     /**
@@ -71,17 +87,24 @@ public class LevelManager {
         Bitmap wallImage = BitmapFactory.decodeResource(con.getResources(), R.drawable.wall);
 
         try {
-            Resources res = con.getResources();
-            InputStream in_s = res.openRawResource(levels[level]);
+            Player p = null;
+            Point playerPos = null;
 
-            byte[] b = new byte[in_s.available()];
-            in_s.read(b);
+            // Get the Resources folder content
+            Resources res = con.getResources();
+            // Load the file
+            InputStream ins = res.openRawResource(levels[level]);
+
+            byte[] b = new byte[ins.available()];
+            ins.read(b);
 
             String levelData = new String(b);
 
+            // We need to remove the \r and \n characters when we parse the file.
             levelData = levelData.replace("\r","");
             levelData = levelData.replace("\n",",");
 
+            // Split the levelData string into an array for parsing
             String[] data = levelData.split(",");
 
             for (int i = 0; i < data.length; i++){
@@ -92,7 +115,8 @@ public class LevelManager {
 
                 switch(objType){
                     case TYPE_PLAYER:
-                        Player p = new Player(ballImage,xPos,yPos);
+                        p = new Player(ballImage,xPos,yPos);
+                        playerPos = new Point(xPos,yPos);
                         objects.add(p);
                         break;
                     case TYPE_WALL:
@@ -109,7 +133,7 @@ public class LevelManager {
                         break;
                 }
             }
-            return new LevelManager(level,objects);
+            return new LevelManager(level,objects,p,playerPos);
         } catch (Exception e) {
             // The file doesn't exist or another error occurred
         }

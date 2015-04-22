@@ -29,7 +29,7 @@ public class GameSurfaceView extends SurfaceView {
 
     // Gameplay variables
     // May want to move this to a different class
-    private static final long TIME_LIMIT = 30000; // The time limit for the level
+    private static final long TIME_LIMIT = 60000; // The time limit for the level
     private long startTime; // The time in which the level started
     private long currentTime; // The current time left
 
@@ -53,7 +53,7 @@ public class GameSurfaceView extends SurfaceView {
         gameLoopThread = new GameLoopThread(this);
 
         // Load the first level by default
-        newLevel(0);
+        newLevel(GameController.getInstance().getCurrentLevel());
 
         // The Holder object is used to determine state changes in the SurfaceView
         holder = getHolder();
@@ -121,7 +121,7 @@ public class GameSurfaceView extends SurfaceView {
         currentTime = TIME_LIMIT - (System.currentTimeMillis() - startTime);
 
         if (currentTime <= 0){
-            newLevel(GameController.getInstance().getCurrentLevel());
+            resetLevel();
         }
     }
 
@@ -131,6 +131,11 @@ public class GameSurfaceView extends SurfaceView {
      */
     protected void newLevel(int levelId) {
         level = LevelManager.loadLevel(getContext(), levelId);
+        startTime = System.currentTimeMillis();
+    }
+
+    protected void resetLevel(){
+        level.resetLevel();
         startTime = System.currentTimeMillis();
     }
 
@@ -158,7 +163,7 @@ public class GameSurfaceView extends SurfaceView {
         canvas.drawText(text, x + shadowXOffset, y + shadowYOffset, paint);
 
         // Then draw the text
-        paint.setColor(Color.LTGRAY);
+        paint.setColor(Color.WHITE);
         canvas.drawText(text, x, y, paint);
     }
 }
