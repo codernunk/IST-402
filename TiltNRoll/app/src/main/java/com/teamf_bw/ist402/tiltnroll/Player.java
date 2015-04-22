@@ -20,19 +20,31 @@ public class Player extends GameObject {
 
     public void update(ArrayList<GameObject> objectsInScene){
         x += xVel;
-        y -= yVel;
+        y += yVel;
 
         for (GameObject go : objectsInScene){
-            if (go instanceof Wall && collision(go, false, 0, 0)){
-                if (go.getY() > y){
-                    y = go.getY()-getImage().getHeight();
-                    yVel *= -1;
-                }else{
-                    y = go.getY()+go.getImage().getHeight();
-                    yVel *= -1;
+            // Handle wall collisions
+            if (go instanceof Wall){
+
+                // Check for collisions on the y axis
+                if (collision(go, false, 0, 0)){
+                    if (go.getY() > y){
+                        y = go.getY()-getImage().getHeight();
+                        yVel *= -1;
+                    }else{
+                        y = go.getY()+go.getImage().getHeight();
+                        yVel *= -1;
+                    }
+                    // Check for x axis collision - doesn't work
+                    if (xVel > 0 && x < go.getX()+go.getImage().getWidth()){
+                        xVel *= -1;
+                    }
+                    if (xVel < 0 && x+getImage().getWidth() > go.getX()){
+                        xVel *= -1;
+                    }
                 }
 
-                Log.d(GameController.TAG_GAME,"Collision with Wall "+getId().toString());
+                //Log.d(GameController.TAG_GAME,"Collision with Wall "+getId().toString());
             }
         }
     }

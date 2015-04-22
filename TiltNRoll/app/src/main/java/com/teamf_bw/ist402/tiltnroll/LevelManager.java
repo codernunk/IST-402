@@ -9,18 +9,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
+ * This class contains all the level objects as well
+ * as the utility for loading levels.
+ *
  * Created by Jesse on 4/20/2015.
  */
 public class LevelManager {
 
-    public static final int TYPE_PLAYER = 0;
-    public static final int TYPE_WALL = 1;
-    public static final int TYPE_GOAL = 2;
-    public static final int TYPE_DEATH = 3;
+    // Object type constants
+    public static final int TYPE_PLAYER = 0; // The number in the level .csv file that represents the player object
+    public static final int TYPE_WALL = 1; // The number in the level .csv file that represents the wall object
+    public static final int TYPE_GOAL = 2; // The number in the level .csv file that represents the goal object
+    public static final int TYPE_DEATH = 3; // The number in the level .csv file that represents the death object
 
-    public static final int MAP_TILES_X = 24;
-    public static final int MAP_TILES_Y = 15;
-
+    // Map constants
+    public static final int MAP_TILES_X = 24; // The number of tiles to be placed horizontally
+    public static final int MAP_TILES_Y = 15; // Note: This is unused, but kept because it is a good reference.
     public static final int IMAGE_SIZE = 80;
 
     // Stores the list of levels in an array for later access
@@ -29,9 +33,37 @@ public class LevelManager {
             R.raw.level2
     };
 
-    public static ArrayList<GameObject> loadLevel(Context con, int level){
+    // Variables for managing the levels and objects
+    private int levelId;
+    private ArrayList<GameObject> gameObjects;
+
+    /**
+     * The constructor is protected because we want to use the
+     * loadLevel method to create LevelManagers instead.
+     * @param levelId
+     * @param objects
+     */
+    protected LevelManager(int levelId, ArrayList<GameObject> objects){
+        this.levelId = levelId;
+        gameObjects = objects;
+    }
+
+    /**
+     * Getter for getting the game objects on the scene.
+     * @return
+     */
+    public ArrayList<GameObject> getGameObjects(){
+        return gameObjects;
+    }
+
+    /**
+     * Loads a new level with new objects.
+     * @param con The context in which the level is loaded, such as a View or an Activity
+     * @param level The number in which level to load.  It is zero relative
+     * @return a new LevelManager object
+     */
+    public static LevelManager loadLevel(Context con, int level){
         ArrayList<GameObject> objects = new ArrayList<GameObject>();
-        String leveldata;
 
         Bitmap ballImage = BitmapFactory.decodeResource(con.getResources(), R.drawable.ball);
         Bitmap deathImage = BitmapFactory.decodeResource(con.getResources(), R.drawable.death);
@@ -45,12 +77,12 @@ public class LevelManager {
             byte[] b = new byte[in_s.available()];
             in_s.read(b);
 
-            leveldata = new String(b);
+            String levelData = new String(b);
 
-            leveldata = leveldata.replace("\r","");
-            leveldata = leveldata.replace("\n",",");
+            levelData = levelData.replace("\r","");
+            levelData = levelData.replace("\n",",");
 
-            String[] data = leveldata.split(",");
+            String[] data = levelData.split(",");
 
             for (int i = 0; i < data.length; i++){
                 int objType = Integer.parseInt(data[i]);
@@ -77,10 +109,19 @@ public class LevelManager {
                         break;
                 }
             }
-            return objects;
+            return new LevelManager(level,objects);
         } catch (Exception e) {
-            // The file doesn't exist
+            // The file doesn't exist or another error occurred
         }
         return null;
+    }
+
+    /**
+     * Checks to see if there are any more levels in the game.
+     * @param levelId The level id in which to test.
+     * @return true if that level exists; false if it does not.
+     */
+    public static boolean levelExists(int levelId){
+        return levelId >= 0 && levelId < levels.length;
     }
 }

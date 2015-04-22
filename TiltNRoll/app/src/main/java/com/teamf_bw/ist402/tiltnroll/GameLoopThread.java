@@ -9,7 +9,8 @@ import android.graphics.Canvas;
  * Created by Jesse on 4/15/2015.
  */
 public class GameLoopThread extends Thread {
-    static final long FPS = 30;
+    public static final long FPS = 60;
+
     private GameSurfaceView view;
     private boolean running = false;
 
@@ -32,6 +33,9 @@ public class GameLoopThread extends Thread {
             try {
                 c = view.getHolder().lockCanvas();
                 synchronized (view.getHolder()) {
+                    // Updates all the game objects based on their individual methods
+                    view.onUpdate();
+                    // Draw the objects on the screen
                     view.onDraw(c);
                 }
             } finally {
