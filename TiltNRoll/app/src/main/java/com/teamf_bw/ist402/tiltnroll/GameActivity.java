@@ -1,23 +1,65 @@
 package com.teamf_bw.ist402.tiltnroll;
 
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.os.PowerManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.os.PowerManager.WakeLock;
 
 
 public class GameActivity extends ActionBarActivity {
 
+    public static Display mDisplay; //stores display data for other classes to access
+
     private GameSurfaceView gameView;
+    private WindowManager mWindowManager; //necessary to retrieve device window information
+    private Accelerometer mAccelerometer;
+
+    private WakeLock mWakeLock;
+    private PowerManager mPowerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_game);
+
+        //necessary for accelerometer workings
+         mAccelerometer = new Accelerometer(this);
+
+
+        //attempt to get the screen to remain bright.
+        mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getClass()
+                .getName());
+
+
+
+
+        //initializing variables that enable one to get display workings
+        mWindowManager =(WindowManager) getSystemService(WINDOW_SERVICE);
+        mDisplay = mWindowManager.getDefaultDisplay();
+
         gameView = new GameSurfaceView(this);
         setContentView(gameView);
     }
+
+    /* code to resume and pause accelerometer readings (battery efficiency)
+    @Override
+    protected void onResume() {
+        mAccelerometer.start();
+    }
+
+    @Override
+    protected void onPause() {
+        mAccelerometer.stop();
+    } */
+
 
 
     @Override

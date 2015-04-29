@@ -117,6 +117,7 @@ public class GameSurfaceView extends SurfaceView {
             g.update(level.getGameObjects());
         }
 
+<<<<<<< Updated upstream
         // Calculate the current time
         currentTime = TIME_LIMIT - (System.currentTimeMillis() - startTime);
 
@@ -165,5 +166,9 @@ public class GameSurfaceView extends SurfaceView {
         // Then draw the text
         paint.setColor(Color.WHITE);
         canvas.drawText(text, x, y, paint);
+=======
+        //stuff goes here. Probably
+
+>>>>>>> Stashed changes
     }
 }
