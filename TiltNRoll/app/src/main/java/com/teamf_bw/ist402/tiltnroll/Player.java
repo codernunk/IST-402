@@ -12,13 +12,9 @@ import java.util.ArrayList;
  */
 public class Player extends GameObject {
 
-<<<<<<< Updated upstream
-    private float xVel = 5f;
-    private float yVel = 0.1f;
-
     private float lastX;
     private float lastY;
-=======
+
     //private double mass = 1000; //superflous. Could be added in as a way to control ball response
     private double aX = (-Accelerometer.sensorValueX); //force of gravity, X direction
     private double aY = (-Accelerometer.sensorValueY); //force of gravity, Y direction
@@ -28,7 +24,7 @@ public class Player extends GameObject {
 
     private double xVel = .5;
     private double yVel = .1;
->>>>>>> Stashed changes
+
 
     public Player(Bitmap image, float x, float y){
         super(image,x,y,0);
@@ -36,15 +32,15 @@ public class Player extends GameObject {
         lastY = y;
     }
 
-    public void update(ArrayList<GameObject> objectsInScene){
-<<<<<<< Updated upstream
+    public void update(ArrayList<GameObject> objectsInScene) {
+
         lastX = x;
         lastY = y;
-=======
+
         double t = 0; //time
 
         //getting "t" (the time between calls of this method)
-        if(timeStamp1 != 0) {
+        if (timeStamp1 != 0) {
             timeStamp2 = System.nanoTime();
             t = (timeStamp2 - timeStamp1) * 0.00000001; //nanoseconds to seconds
             timeStamp1 = 0;
@@ -56,9 +52,9 @@ public class Player extends GameObject {
         aY = (-Accelerometer.sensorValueY); //force of gravity, Y direction
 
         // v = v_0 + at (t should be small enough s.t. assuming linear acceleration is reasonable)
-        xVel += aX * t;
-        yVel += aY * t;
->>>>>>> Stashed changes
+        xVel += aX * t * 0.1;
+        yVel += aY * t * 0.1;
+
 
         x += xVel;
         y += yVel;
@@ -75,50 +71,34 @@ public class Player extends GameObject {
         */
 
 
+        for (GameObject go : objectsInScene) {
 
-        for (GameObject go : objectsInScene){
-<<<<<<< Updated upstream
             // Handle wall collisions
-            if (go instanceof Wall){
+            if (go instanceof Wall) {
 
                 // Check for collisions on the y axis
-                if (collision(go, false, (int)xVel, (int)yVel)){
-/*                    if (go.getY() > y){
-                        y = go.getY()-getImage().getHeight();
-                        yVel *= -1;
-                    }else{
-                        y = go.getY()+go.getImage().getHeight();
-                        yVel *= -1;
-                    }
-                    // Check for x axis collision - doesn't work
-                    if (xVel > 0 && x < go.getX()+go.getImage().getWidth()){
-                        xVel *= -1;
-                    }
-                    if (xVel < 0 && x+getImage().getWidth() > go.getX()){
-                        xVel *= -1;
-                    }*/
+                if (collision(go, false, (int) xVel, (int) yVel)) {
                     // Calculate collision angle
-                    double angle = -Math.atan2(yVel,xVel);
-                    float speed = (float)Math.sqrt(xVel * xVel + yVel * yVel);
+                    double angle = -Math.atan2(yVel, xVel);
+                    float speed = (float) Math.sqrt(xVel * xVel + yVel * yVel);
                     //Log.d(GameController.TAG_GAME,"angle: "+angle);
-                    xVel = (float)Math.cos(angle) * speed;
-                    yVel = (float)Math.sin(angle) * speed;
+                    xVel = (float) Math.cos(angle) * speed;
+                    yVel = (float) Math.sin(angle) * speed;
                     x = lastX;
                     y = lastY;
-=======
-            if (go instanceof Wall && collision(go, false, 0, 0)){
-                if (go.getY() > y){
-                    y = go.getY()-getImage().getHeight();
-                    yVel *= -0.7; //modified from 1 to provide some inelastic collision properties
-                }else{
-                    y = go.getY()+go.getImage().getHeight();
-                    yVel *= -0.7;
->>>>>>> Stashed changes
-                }
 
-                //Log.d(GameController.TAG_GAME,"Collision with Wall "+getId().toString());
+                    if (go instanceof Wall && collision(go, false, 0, 0)) {
+                        if (go.getY() > y) {
+                            y = go.getY() - getImage().getHeight();
+                            yVel *= -0.7; //modified from 1 to provide some inelastic collision properties
+                        } else {
+                            y = go.getY() + go.getImage().getHeight();
+                            yVel *= -0.7;
+
+                        }
+                    }
+                }
             }
         }
     }
-
 }
