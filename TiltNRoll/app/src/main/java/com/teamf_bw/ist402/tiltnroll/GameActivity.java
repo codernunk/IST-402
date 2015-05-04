@@ -1,17 +1,16 @@
+package com.teamf_bw.ist402.tiltnroll;
 
-        package com.teamf_bw.ist402.tiltnroll;
-
-        import android.hardware.Sensor;
-        import android.hardware.SensorManager;
-        import android.os.PowerManager;
-        import android.support.v7.app.ActionBarActivity;
-        import android.os.Bundle;
-        import android.view.Display;
-        import android.view.Menu;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.view.WindowManager;
-        import android.os.PowerManager.WakeLock;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.os.PowerManager;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.os.PowerManager.WakeLock;
 
 
 public class GameActivity extends ActionBarActivity {
@@ -40,10 +39,8 @@ public class GameActivity extends ActionBarActivity {
                 .getName());
 
 
-
-
         //initializing variables that enable one to get display workings
-        mWindowManager =(WindowManager) getSystemService(WINDOW_SERVICE);
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mDisplay = mWindowManager.getDefaultDisplay();
 
         gameView = new GameSurfaceView(this);
@@ -93,6 +90,7 @@ public class GameActivity extends ActionBarActivity {
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 }

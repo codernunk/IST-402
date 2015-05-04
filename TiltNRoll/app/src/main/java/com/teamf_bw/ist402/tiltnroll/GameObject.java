@@ -1,6 +1,7 @@
 package com.teamf_bw.ist402.tiltnroll;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 
@@ -21,7 +22,7 @@ public abstract class GameObject implements Comparable<GameObject> {
     protected float x;
     protected float y;
 
-    public GameObject(Bitmap image, float x, float y, int depth){
+    public GameObject(Bitmap image, float x, float y, int depth) {
         id = UUID.randomUUID();
         this.image = image;
         this.x = x;
@@ -29,9 +30,7 @@ public abstract class GameObject implements Comparable<GameObject> {
         this.depth = depth;
     }
 
-    public UUID getId() {
-        return id;
-    }
+    public UUID getId() { return id; }
 
     public Bitmap getImage() {
         return image;
@@ -53,92 +52,103 @@ public abstract class GameObject implements Comparable<GameObject> {
         return y;
     }
 
-    public void setY(float y) {
-        this.y = y;
-    }
+    public void setY(float y) { this.y = y; }
 
-    public int getDepth() {
-        return depth;
-    }
+    public int getDepth() { return depth; }
 
-    public int compareTo(GameObject other){
+    /**
+     * Compares other objects by depth for drawing.
+     * @param other
+     * @return
+     */
+    public int compareTo(GameObject other) {
         return this.depth - other.getDepth();
     }
 
-    public boolean collision(GameObject other, boolean isPrecise, int xOffset, int yOffset){
+    /**
+     * Checks to see if there is a collision with another
+     * object.
+     * @param other
+     * @param xOffset
+     * @param yOffset
+     * @return
+     */
+    public boolean collision(GameObject other, int xOffset, int yOffset) {
 
         // Get the rectangle and bounds of the source object (the caller)
-        int sourceTop = (int)getY()+xOffset;
-        int sourceLeft = (int)getX()+yOffset;
-        int sourceRight = sourceLeft + (int)getImage().getWidth()+xOffset;
-        int sourceBottom = sourceTop + (int)getImage().getHeight()+yOffset;
+        int sourceTop = (int) getY() + yOffset;
+        int sourceLeft = (int) getX() + xOffset;
+        int sourceRight = sourceLeft + (int) getImage().getWidth() + xOffset;
+        int sourceBottom = sourceTop + (int) getImage().getHeight() + yOffset;
 
-        Rect sourceBounds = new Rect(sourceLeft,sourceTop,sourceRight,sourceBottom);
+        Rect sourceBounds = new Rect(sourceLeft, sourceTop, sourceRight, sourceBottom);
 
         // Get the rectangle and bounds of the target object
-        int targetTop = (int)other.getY();
-        int targetLeft = (int)other.getX();
-        int targetRight = targetLeft + (int)other.getImage().getWidth();
-        int targetBottom = targetTop + (int)other.getImage().getHeight();
+        int targetTop = (int) other.getY();
+        int targetLeft = (int) other.getX();
+        int targetRight = targetLeft + (int) other.getImage().getWidth();
+        int targetBottom = targetTop + (int) other.getImage().getHeight();
 
-        Rect targetBounds = new Rect(targetLeft,targetTop,targetRight,targetBottom);
+        Rect targetBounds = new Rect(targetLeft, targetTop, targetRight, targetBottom);
 
-        if (isPrecise){
-
-            if (sourceBounds.intersect(targetBounds)){
-                Rect collisionBounds = getCollisionBounds(sourceBounds, targetBounds);
-                for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
-                    for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
-                        int bitmap1Pixel = getImage().getPixel(i, j);
-                        int bitmap2Pixel = other.getImage().getPixel(i, j);
-                        if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
+        if (sourceBounds.intersect(targetBounds)) {
+            for (int i = sourceBounds.left; i < sourceBounds.right; i++) {
+                for (int j = sourceBounds.top; j < sourceBounds.bottom; j++) {
+                    if (getImage().getPixel(i - sourceBounds.left, j - sourceBounds.top) !=
+                            Color.TRANSPARENT) {
+                        if (other.getImage().getPixel(i - targetBounds.left, j - targetBounds.top) !=
+                                Color.TRANSPARENT) {
                             return true;
                         }
                     }
                 }
             }
-        }else{
-            return sourceBounds.intersect(targetBounds);
         }
-
         return false;
     }
 
-    public GameObject collisionAtPosition(ArrayList<GameObject> objectsInScene, int xOffset, int yOffset){
-        // Get the rectangle and bounds of the source object (the caller)
-        int sourceTop = (int)getY()+xOffset;
-        int sourceLeft = (int)getX()+yOffset;
-        int sourceRight = sourceLeft;
-        int sourceBottom = sourceTop;
+    /**
+     * Checks to see if there is a rectangle collision
+     * specified by the center pixel of the source object
+     * (for situations such as colliding with Death and
+     * Goal objects).  This prevents the player from
+     * dying if it touches the every edge of the object.
+     * Rather, this will return true if half of the object
+     * is in the collision.
+     * @param other
+     * @return
+     */
+    public boolean collisionCenterPixel(GameObject other) {
 
-        Rect sourceBounds = new Rect(sourceLeft,sourceTop,sourceRight,sourceBottom);
+        // Get the center of the source object
+        int centerX = (int) getX() + getImage().getWidth()/2;
+        int centerY = (int) getY() + getImage().getHeight()/2;
 
-        for (GameObject other: objectsInScene){
-            // Get the rectangle and bounds of the target object
-            int targetTop = (int)other.getY();
-            int targetLeft = (int)other.getX();
-            int targetRight = targetLeft + (int)other.getImage().getWidth();
-            int targetBottom = targetTop + (int)other.getImage().getHeight();
+        // Get the rectangle and bounds of the target object
+        int targetTop = (int) other.getY();
+        int targetLeft = (int) other.getX();
+        int targetRight = targetLeft + (int) other.getImage().getWidth();
+        int targetBottom = targetTop + (int) other.getImage().getHeight();
 
-            Rect targetBounds = new Rect(targetLeft,targetTop,targetRight,targetBottom);
+        Rect targetBounds = new Rect(targetLeft, targetTop, targetRight, targetBottom);
 
-            if (targetBounds.intersect(sourceBounds))
-                return other;
-        }
-        return null;
+        return (targetBounds.contains(centerX,centerY));
     }
 
-    private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
-        int left = (int) Math.max(rect1.left, rect2.left);
-        int top = (int) Math.max(rect1.top, rect2.top);
-        int right = (int) Math.min(rect1.right, rect2.right);
-        int bottom = (int) Math.min(rect1.bottom, rect2.bottom);
-        return new Rect(left, top, right, bottom);
+    /**
+     * Draws the object to the canvas.
+     * Note: This can be overridden to do
+     * more if necessary.
+     * @param canvas
+     */
+    public void draw(Canvas canvas){
+        canvas.drawBitmap(image, x, y, null);
     }
 
-    private static boolean isFilled(int pixel) {
-        return pixel != Color.TRANSPARENT;
-    }
-
+    /**
+     * Updates the GameObject to run some code every time
+     * the game loop thread is updated.
+     * @param objectsInScene
+     */
     public abstract void update(ArrayList<GameObject> objectsInScene);
 }

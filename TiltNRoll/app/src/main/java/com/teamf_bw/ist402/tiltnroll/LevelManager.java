@@ -31,7 +31,10 @@ public class LevelManager {
     // Stores the list of levels in an array for later access
     private static int[] levels = {
             R.raw.level1,
-            R.raw.level2
+            R.raw.level2,
+            R.raw.level3,
+            R.raw.level4,
+            R.raw.level5
     };
 
     // Variables for managing the levels and objects
@@ -78,7 +81,7 @@ public class LevelManager {
      * @param level The number in which level to load.  It is zero relative
      * @return a new LevelManager object
      */
-    public static LevelManager loadLevel(Context con, int level){
+    public static LevelManager loadLevel(Context con, GameSurfaceView view, int level){
         ArrayList<GameObject> objects = new ArrayList<GameObject>();
 
         Bitmap ballImage = BitmapFactory.decodeResource(con.getResources(), R.drawable.ball);
@@ -115,25 +118,25 @@ public class LevelManager {
 
                 switch(objType){
                     case TYPE_PLAYER:
-                        p = new Player(ballImage,xPos,yPos);
+                        p = new Player(ballImage, xPos, yPos, view);
                         playerPos = new Point(xPos,yPos);
                         objects.add(p);
                         break;
                     case TYPE_WALL:
-                        Wall w = new Wall(wallImage,xPos,yPos);
+                        Wall w = new Wall(wallImage, xPos, yPos);
                         objects.add(w);
                         break;
                     case TYPE_GOAL:
-                        Goal g = new Goal(goalImage,xPos,yPos);
+                        Goal g = new Goal(goalImage, xPos, yPos);
                         objects.add(g);
                         break;
                     case TYPE_DEATH:
-                        Death d = new Death(deathImage,xPos,yPos);
+                        Death d = new Death(deathImage, xPos, yPos);
                         objects.add(d);
                         break;
                 }
             }
-            return new LevelManager(level,objects,p,playerPos);
+            return new LevelManager(level, objects, p, playerPos);
         } catch (Exception e) {
             // The file doesn't exist or another error occurred
         }

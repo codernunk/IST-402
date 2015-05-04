@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.Display;
@@ -32,6 +33,8 @@ public class GameSurfaceView extends SurfaceView {
     private static final long TIME_LIMIT = 60000; // The time limit for the level
     private long startTime; // The time in which the level started
     private long currentTime; // The current time left
+
+    private Bitmap lifeImage = BitmapFactory.decodeResource(getResources(), R.drawable.ball); // Used to draw the lives
 
     public GameSurfaceView(Context context) {
         super(context);
@@ -98,13 +101,19 @@ public class GameSurfaceView extends SurfaceView {
 
         // Draw all the game objects
         for (GameObject g : level.getGameObjects()) {
-            canvas.drawBitmap(g.getImage(), g.getX(), g.getY(), null);
+            g.draw(canvas);
         }
 
         // Draw the UI texts
         drawTextWithShadow(canvas, "Score: "+GameController.getInstance().getScore(), 10, 64, 3, 3, 64, Paint.Align.LEFT);
-        drawTextWithShadow(canvas, "Level "+(GameController.getInstance().getCurrentLevel()+1), 10, canvas.getHeight() - 10, 3, 3, 64, Paint.Align.LEFT);
-        drawTextWithShadow(canvas, "Time: "+GameUtilities.formatTime(currentTime), canvas.getWidth() / 2, 64, 3, 3, 64, Paint.Align.CENTER);
+        drawTextWithShadow(canvas, "Level "+(GameController.getInstance().getCurrentLevel()+1), canvas.getWidth(), canvas.getHeight() - 10, 3, 3, 64, Paint.Align.RIGHT);
+        drawTextWithShadow(canvas, "Time: " + GameUtilities.formatTime(currentTime), canvas.getWidth() / 2, 64, 3, 3, 64, Paint.Align.CENTER);
+        drawTextWithShadow(canvas, "Lives: ", 10, canvas.getHeight()-10, 3, 3, 64, Paint.Align.LEFT);
+
+        // Draw the lives
+        for (int i = 0; i < GameController.getInstance().getLives(); i++){
+            canvas.drawBitmap(lifeImage,200+lifeImage.getWidth()*i,canvas.getHeight()-lifeImage.getHeight(),null);
+        }
     }
 
     /**
@@ -121,7 +130,7 @@ public class GameSurfaceView extends SurfaceView {
         currentTime = TIME_LIMIT - (System.currentTimeMillis() - startTime);
 
         if (currentTime <= 0){
-            resetLevel();
+            resetLevel(true);
         }
     }
 
@@ -130,11 +139,28 @@ public class GameSurfaceView extends SurfaceView {
      * @param levelId The level in which to load
      */
     protected void newLevel(int levelId) {
-        level = LevelManager.loadLevel(getContext(), levelId);
+        level = LevelManager.loadLevel(getContext(), this, levelId);
         startTime = System.currentTimeMillis();
     }
 
-    protected void resetLevel(){
+    /**
+     * Moves on to the next level.
+     */
+    protected void nextLevel(){
+        GameController.getInstance().addScore((int)currentTime);
+        GameController.getInstance().nextLevel();
+        newLevel(GameController.getInstance().getCurrentLevel());
+    }
+
+    /**
+     * Resets the level and the timer.
+     * @param loseLife Should the player be reset and lose a life or
+     *                 should the player just be reset?
+     */
+    protected void resetLevel(boolean loseLife){
+        if (loseLife){
+            GameController.getInstance().loseALife();
+        }
         level.resetLevel();
         startTime = System.currentTimeMillis();
     }
