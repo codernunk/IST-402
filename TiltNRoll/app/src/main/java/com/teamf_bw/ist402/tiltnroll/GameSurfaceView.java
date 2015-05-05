@@ -106,7 +106,7 @@ public class GameSurfaceView extends SurfaceView {
 
         // Draw the UI texts
         drawTextWithShadow(canvas, "Score: "+GameController.getInstance().getScore(), 10, 64, 3, 3, 64, Paint.Align.LEFT);
-        drawTextWithShadow(canvas, "Level "+(GameController.getInstance().getCurrentLevel()+1), canvas.getWidth(), canvas.getHeight() - 10, 3, 3, 64, Paint.Align.RIGHT);
+        drawTextWithShadow(canvas, "Level "+(GameController.getInstance().getCurrentLevel()+1), canvas.getWidth() - 10, canvas.getHeight() - 10, 3, 3, 64, Paint.Align.RIGHT);
         drawTextWithShadow(canvas, "Time: " + GameUtilities.formatTime(currentTime), canvas.getWidth() / 2, 64, 3, 3, 64, Paint.Align.CENTER);
         drawTextWithShadow(canvas, "Lives: ", 10, canvas.getHeight()-10, 3, 3, 64, Paint.Align.LEFT);
 
@@ -160,9 +160,9 @@ public class GameSurfaceView extends SurfaceView {
     protected void resetLevel(boolean loseLife){
         if (loseLife){
             GameController.getInstance().loseALife();
+            startTime = System.currentTimeMillis();
         }
         level.resetLevel();
-        startTime = System.currentTimeMillis();
     }
 
     /**

@@ -34,7 +34,8 @@ public class LevelManager {
             R.raw.level2,
             R.raw.level3,
             R.raw.level4,
-            R.raw.level5
+            R.raw.level5,
+            R.raw.level6
     };
 
     // Variables for managing the levels and objects

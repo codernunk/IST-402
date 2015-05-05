@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class Player extends GameObject {
 
-    public static final float DAMPING_COEFFICIENT = 0.9f;
+    public static final float DAMPING_COEFFICIENT = 0.7f;
     public static final float MAX_SPEED = 8f;
 
     private GameSurfaceView viewContext; // Used to call the next level and reset level functions
@@ -45,6 +45,9 @@ public class Player extends GameObject {
         scale = 1;
     }
 
+    /**
+     * Resets the player's properties.
+     */
     public void reset(){
         xVel = 0;
         yVel = 0;
@@ -129,9 +132,13 @@ public class Player extends GameObject {
             if (go instanceof Wall) { // Handle wall collisions
                 // Check for collisions on the y axis
                 if (collision(go, 0, 0)) {
-                    double colAngle = Math.PI-angle;
-                    double deg1 = Math.toDegrees(angle);
-                    double angleInDegrees = Math.toDegrees(colAngle);
+                    double colAngle;
+                    // Check if the player is hitting walls at the top or the bottom
+                    if (collision(go, 0, -getImage().getHeight()+2) || collision(go,0,getImage().getHeight())){
+                        colAngle = -angle;
+                    }else{
+                        colAngle = Math.PI-angle;
+                    }
 
                     // Assign the new speed calculations to the the velocity
                     xVel = (float) Math.cos(colAngle) * speed * DAMPING_COEFFICIENT;
@@ -143,12 +150,11 @@ public class Player extends GameObject {
                 }
             }else if (go instanceof Goal){ // Handle goal
                 if (collisionCenterPixel(go)) {
-                    viewContext.nextLevel();
+                    viewContext.nextLevel(); // Go to the next level
                 }
             }else if (go instanceof Death){ // Handle death
                 if (collisionCenterPixel(go)) {
-                    Log.d("Game","I am dead");
-                    isDead = true;
+                    isDead = true; // Death animation
                 }
             }
         }
@@ -162,6 +168,7 @@ public class Player extends GameObject {
     @Override
     public void draw(Canvas canvas){
         Matrix mt = new Matrix();
+        mt.postScale(canvas.getWidth()/1920,canvas.getHeight()/1200);
         mt.postScale(scale, scale);
         mt.postTranslate(x, y);
         canvas.drawBitmap(getImage(), mt, null);

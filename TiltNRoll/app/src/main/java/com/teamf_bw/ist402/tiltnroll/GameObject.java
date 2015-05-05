@@ -3,6 +3,7 @@ package com.teamf_bw.ist402.tiltnroll;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
@@ -142,7 +143,10 @@ public abstract class GameObject implements Comparable<GameObject> {
      * @param canvas
      */
     public void draw(Canvas canvas){
-        canvas.drawBitmap(image, x, y, null);
+        Matrix mt = new Matrix();
+        mt.postScale(canvas.getWidth()/1920,canvas.getHeight()/1200);
+        mt.postTranslate(x, y);
+        canvas.drawBitmap(image, mt, null);
     }
 
     /**
