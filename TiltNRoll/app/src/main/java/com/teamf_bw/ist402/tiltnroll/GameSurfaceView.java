@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -30,9 +31,9 @@ public class GameSurfaceView extends SurfaceView {
 
     // Gameplay variables
     // May want to move this to a different class
-    private static final long TIME_LIMIT = 60000; // The time limit for the level
     private long startTime; // The time in which the level started
     private long currentTime; // The current time left
+    private long timeLimit; // The starting time limit
 
     private Bitmap lifeImage = BitmapFactory.decodeResource(getResources(), R.drawable.ball); // Used to draw the lives
 
@@ -127,7 +128,7 @@ public class GameSurfaceView extends SurfaceView {
         }
 
         // Calculate the current time
-        currentTime = TIME_LIMIT - (System.currentTimeMillis() - startTime);
+        currentTime = timeLimit - (System.currentTimeMillis() - startTime);
 
         if (currentTime <= 0){
             resetLevel(true);
@@ -141,6 +142,7 @@ public class GameSurfaceView extends SurfaceView {
     protected void newLevel(int levelId) {
         level = LevelManager.loadLevel(getContext(), this, levelId);
         startTime = System.currentTimeMillis();
+        timeLimit = GameController.getInstance().getTimeLimit();
     }
 
     /**

@@ -6,6 +6,10 @@ package com.teamf_bw.ist402.tiltnroll;
  */
 public class GameController {
 
+    private static final long TIME_LIMIT_EASY = 60000; // The time limit for the level
+    private static final long TIME_LIMIT_MEDIUM = 45000; // The time limit for the level
+    private static final long TIME_LIMIT_HARD = 30000; // The time limit for the level
+
     public static final String TAG_GAME = "Game";
 
     private static GameController instance;
@@ -13,6 +17,7 @@ public class GameController {
     private int currentLevel;
     private int score;
     private int lives;
+    private int timesCleared;
 
     public GameController(){
         resetGame();
@@ -44,16 +49,34 @@ public class GameController {
         currentLevel = 0;
         score = 0;
         lives = 3;
+        timesCleared = 0;
     }
 
     /**
      * Goes to the next level in the sequence.
      */
     public void nextLevel(){
-        if (LevelManager.levelExists(currentLevel))
+        if (LevelManager.levelExists(currentLevel+1)){
             currentLevel ++;
-        else
+        }
+        else{
             currentLevel = 0; // Restart from the beginning
+            timesCleared++;
+        }
+
+    }
+
+    /**
+     * Returns the time limit for the level
+     * @return
+     */
+    public long getTimeLimit(){
+        if (timesCleared == 0)
+            return TIME_LIMIT_EASY;
+        else if (timesCleared == 1)
+            return TIME_LIMIT_MEDIUM;
+        else
+            return TIME_LIMIT_HARD;
     }
 
     /**

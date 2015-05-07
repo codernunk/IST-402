@@ -2,6 +2,7 @@ package com.teamf_bw.ist402.tiltnroll;
 
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.PowerManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.os.PowerManager.WakeLock;
 public class GameActivity extends ActionBarActivity {
 
     public static Display mDisplay; //stores display data for other classes to access
+    private static MediaPlayer mediaPlayer;
 
     private GameSurfaceView gameView;
     private WindowManager mWindowManager; //necessary to retrieve device window information
@@ -42,6 +44,11 @@ public class GameActivity extends ActionBarActivity {
         //initializing variables that enable one to get display workings
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mDisplay = mWindowManager.getDefaultDisplay();
+
+        // Play the music
+        mediaPlayer = MediaPlayer.create(this,R.raw.music);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
 
         gameView = new GameSurfaceView(this);
         setContentView(gameView);

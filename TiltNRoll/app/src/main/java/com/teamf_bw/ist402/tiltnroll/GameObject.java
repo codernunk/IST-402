@@ -77,10 +77,12 @@ public abstract class GameObject implements Comparable<GameObject> {
     public boolean collision(GameObject other, int xOffset, int yOffset) {
 
         // Get the rectangle and bounds of the source object (the caller)
-        int sourceTop = (int) getY() + yOffset;
-        int sourceLeft = (int) getX() + xOffset;
-        int sourceRight = sourceLeft + (int) getImage().getWidth() + xOffset;
-        int sourceBottom = sourceTop + (int) getImage().getHeight() + yOffset;
+        // The additional 1s are to shrink the collision box so the player can fit through
+        // the blocks
+        int sourceTop = (int) getY() + yOffset + 2;
+        int sourceLeft = (int) getX() + xOffset + 2;
+        int sourceRight = sourceLeft + (int) getImage().getWidth() + xOffset - 2;
+        int sourceBottom = sourceTop + (int) getImage().getHeight() + yOffset - 2;
 
         Rect sourceBounds = new Rect(sourceLeft, sourceTop, sourceRight, sourceBottom);
 
@@ -144,7 +146,7 @@ public abstract class GameObject implements Comparable<GameObject> {
      */
     public void draw(Canvas canvas){
         Matrix mt = new Matrix();
-        mt.postScale(canvas.getWidth()/1920,canvas.getHeight()/1200);
+        //mt.postScale(canvas.getWidth()/1920,canvas.getHeight()/1200);
         mt.postTranslate(x, y);
         canvas.drawBitmap(image, mt, null);
     }

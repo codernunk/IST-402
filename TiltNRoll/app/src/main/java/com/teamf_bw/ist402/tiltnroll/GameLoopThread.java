@@ -1,5 +1,6 @@
 package com.teamf_bw.ist402.tiltnroll;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 
 /**
@@ -22,6 +23,7 @@ public class GameLoopThread extends Thread {
         running = run;
     }
 
+    @SuppressLint("WrongCall")
     @Override
     public void run() {
         long ticksPS = 1000 / FPS;

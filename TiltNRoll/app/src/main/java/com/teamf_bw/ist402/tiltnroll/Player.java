@@ -14,8 +14,8 @@ import java.util.ArrayList;
  */
 public class Player extends GameObject {
 
-    public static final float DAMPING_COEFFICIENT = 0.7f;
-    public static final float MAX_SPEED = 8f;
+    public static final float DAMPING_COEFFICIENT = 0.6f;
+    public static final float MAX_SPEED = 10f;
 
     private GameSurfaceView viewContext; // Used to call the next level and reset level functions
 
@@ -134,7 +134,7 @@ public class Player extends GameObject {
                 if (collision(go, 0, 0)) {
                     double colAngle;
                     // Check if the player is hitting walls at the top or the bottom
-                    if (collision(go, 0, -getImage().getHeight()+2) || collision(go,0,getImage().getHeight())){
+                    if (collision(go, 0, -getImage().getHeight()+4) || collision(go,0,getImage().getHeight())){
                         colAngle = -angle;
                     }else{
                         colAngle = Math.PI-angle;
