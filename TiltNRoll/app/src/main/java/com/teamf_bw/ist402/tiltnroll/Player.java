@@ -168,7 +168,7 @@ public class Player extends GameObject {
     @Override
     public void draw(Canvas canvas){
         Matrix mt = new Matrix();
-        mt.postScale(canvas.getWidth()/1920,canvas.getHeight()/1200);
+        //mt.postScale(canvas.getWidth()/1920,canvas.getHeight()/1200);
         mt.postScale(scale, scale);
         mt.postTranslate(x, y);
         canvas.drawBitmap(getImage(), mt, null);
